@@ -1,0 +1,11 @@
+Giới thiệu
+
+Thư mục Bookstore_Blockchain là source của web, các bạn follow theo, trong đó
+
+    • Thư mục Galary with Zoom là thư mục chứa source để hiển thị ảnh của CFG.
+    • Thư mục /thuvienbk/templates/pages/ chưa source giao diện, các tính năng của web, … các bạn nghiên cứu Django là các bạn sẽ hiểu được kiến trúc của nó như thế nào nhé.
+    • Thư mục management liên quan đến import dữ liệu trong DB
+    • Ngoài ra có các file .py ở ngoài như manage.py rồi url hoặc view các bạn cũng nghiên cứu trong framework Django nhé.
+    • File Readme có hướng dẫn cách khởi động website. 
+
+Thư mục blockchain-wallet-apis là thư mục chứa cái API liên quan đến giao dịch tiền ảo có sử dụng giao thức bảo mật. Có hướng dẫn cụ thể trong file Readme.
