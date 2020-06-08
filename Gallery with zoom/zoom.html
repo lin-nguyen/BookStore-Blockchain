@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<meta charset='utf-8'/>
+	<title>jQuery Zoom Demo</title>
+	<style>
+		/* styles unrelated to zoom */
+		* { border:0; margin:0; padding:0; }
+		p { position:absolute; top:3px; right:28px; color:#555; font:bold 13px/1 sans-serif;}
+
+		/* these styles are for the demo, but are not required for the plugin */
+		.zoom {
+			display:inline-block;
+			position: relative;
+		}
+
+		.zoom img {
+			display: block;
+		}
+
+		.zoom img::selection { background-color: transparent; }
+
+	</style>
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+	<script src='jquery.zoom.js'></script>
+	<script>
+	/* Authored by Boaz James Otieno */
+/* full screen image slider */
+
+var arr=['https://picsum.photos/1920/1200?image=856','https://picsum.photos/1920/1200?image=836','https://picsum.photos/1920/1200?image=823','https://picsum.photos/1920/1200?image=817','https://picsum.photos/1920/1200?image=797']; //an array of image sources
+var pos=0; //initializes image position in the array
+$(document).ready(function () {
+    /* displays next image */
+		$('#ex3').html('<img src="'+arr[pos]+'" width="555" height="320" >');//show image
+		$('#ex3').zoom({ on:'click' });
+
+    function next(){
+        if(pos>arr.length-2){
+            pos=-1;
+        }
+        $('#ex3').html('<img src="'+arr[pos+1]+'" width="555" height="320" >');//show image
+				$('#ex3').zoom({ on:'click' });
+
+        pos++;
+    }
+    function previous() {
+        if(pos<1){
+            pos=arr.length;
+        }
+        $('#ex3').html('<img src="'+arr[pos-1]+'" width="555" height="320" >');
+				$('#ex3').zoom({ on:'click' });
+
+        pos--;
+
+    }
+    $('button#next').on('click',function (e) {
+        next();//call function next
+    });
+
+    $('button#previous').on('click',function (e) {
+        previous();//call function previous
+    });
+    /* end of onclick previous */
+
+});
+	</script>
+</head>
+<body>
+	<!-- Large modal -->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+
+	<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content ">
+				<div class='container-slider d-flex justify-content-center align-items-center'>
+					<button type="button" class="btn btn-primary" id="previous"style="height:30px">
+						previous
+					</button>
+					<span class="zoom" id="ex3">
+					</span>
+					<button type="button" class="btn btn-primary" id="next" style="height:30px">
+						next
+					</button>
+				</div>
+	    </div>
+	  </div>
+	</div>
+
+
+</body>
+</html>

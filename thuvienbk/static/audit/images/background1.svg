@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.557 590.366">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #0d62f5;
+        stroke-miterlimit: 10;
+        stroke-width: 0.5px;
+        opacity: 0.505;
+      }
+    </style>
+  </defs>
+  <g id="Group_24" data-name="Group 24" transform="translate(-1.65 -1.411)">
+    <line id="Line_39" data-name="Line 39" class="cls-1" x1="255.296" y1="442.109" transform="translate(257.661 1.7)"/>
+    <line id="Line_40" data-name="Line 40" class="cls-1" x2="511.057" y2="294.894" transform="translate(1.9 148.914)"/>
+    <line id="Line_41" data-name="Line 41" class="cls-1" x1="511.057" y2="294.894" transform="translate(1.9 148.914)"/>
+    <line id="Line_42" data-name="Line 42" class="cls-1" y1="589.789" transform="translate(257.661 1.7)"/>
+    <line id="Line_43" data-name="Line 43" class="cls-1" x1="511.057" transform="translate(1.9 443.809)"/>
+    <line id="Line_44" data-name="Line 44" class="cls-1" x1="255.761" y2="442.109" transform="translate(1.9 1.7)"/>
+    <line id="Line_45" data-name="Line 45" class="cls-1" x1="511.057" transform="translate(1.9 148.914)"/>
+    <line id="Line_46" data-name="Line 46" class="cls-1" y1="442.574" x2="255.296" transform="translate(257.661 148.914)"/>
+    <line id="Line_47" data-name="Line 47" class="cls-1" x2="255.761" y2="442.574" transform="translate(1.9 148.914)"/>
+    <path id="Path_10" data-name="Path 10" class="cls-1" d="M513.057,443.809V148.914L257.761,1.7,2,148.914V443.809l255.761,147.68Z" transform="translate(-0.1)"/>
+    <line id="Line_48" data-name="Line 48" class="cls-1" x2="511.057" transform="translate(1.9 296.594)"/>
+    <line id="Line_49" data-name="Line 49" class="cls-1" y1="440.245" x2="259.488" transform="translate(127.684 76.239)"/>
+    <line id="Line_50" data-name="Line 50" class="cls-1" x1="247.376" y1="446.767" transform="translate(133.741 72.978)"/>
+  </g>
+</svg>

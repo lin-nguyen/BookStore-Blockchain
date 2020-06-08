@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.917 16.373">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #0d62f5;
+      }
+    </style>
+  </defs>
+  <g id="checkmark" transform="translate(0 -96.525)">
+    <g id="Group_28" data-name="Group 28" transform="translate(0 96.525)">
+      <path id="Path_71" data-name="Path 71" class="cls-1" d="M8.505,112.9h0a.963.963,0,0,1-.679-.284l-7.544-7.6a.961.961,0,1,1,1.362-1.354l6.865,6.916,13.771-13.77a.961.961,0,1,1,1.358,1.358L9.184,112.617A.961.961,0,0,1,8.505,112.9Z" transform="translate(0 -96.526)"/>
+    </g>
+  </g>
+</svg>

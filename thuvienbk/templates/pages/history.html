@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% block title %}Order History{% endblock %}
+{% block content %}
+<legend class="border-bottom mb-4">Transaction history</legend>
+<div class="container" align="center">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr style="text-align:center">
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Started</th>
+                    <th>Finished</th>
+                    <th>State</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in user.transaction_set.all %}
+                <tr style="text-align:center">
+                    <td>{{ obj.book.ISBN }}</td>
+                    <td><a href="{% url 'home' %}">{{ obj.book.title }}</a></td>
+                    <td>{{ obj.book.price }} ETH</td>
+                    <td>{{ obj.start_time }}</td>
+                    <td>{{ obj.end_time }}</td>
+                    <td>
+                        {% if obj.state == 0 %}
+                        <div style="color:red;">Fail</div>
+                        {% elif obj.state == 1 %}
+                        <div style="color:green;">Success</div>
+                        {% elif obj.state == 2 %}
+                        <div style="color:blue;">Pending</div>
+                        {% else %}
+                        <div style="color:blue;">No information</div>
+                        {% endif %}
+                    </td>
+                    <td>{{ obj.description }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
