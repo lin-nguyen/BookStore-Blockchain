@@ -90,6 +90,7 @@ class Rating(models.Model):
     point = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(1)])
     comment = models.CharField(max_length=100)
 
+# HI HI HI HI HI
 
 # class PhongThuVien(models.Model):
 #     ma_so_phong = models.CharField(max_length=100,unique=True)
