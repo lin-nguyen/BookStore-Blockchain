@@ -1,0 +1,56 @@
+{% extends "_base.html" %}
+{% block content %}
+
+    <form method="get" action="{% url 'searched-book' %}">
+    <div class="form-row">
+        <div class="form-group col-12">
+            <div class="input-group">
+                <input class="form-control py-2 border-right-0 border" name="title"
+                       placeholder="Title"/>
+                <span class="input-group-append">
+                    <span class="input-group-text bg-transparent">
+                                <i class="fa fa-search"></i>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    {% for book in books %}
+        <article class="media content-section">
+            <img class="mr-2" src=" {{ book.bookimage.image.url }} " width="50px" height="50px">
+            <div class="media-body">
+                <div class="article-metadata">
+                    {% for author in book.authors.all %}
+                    <a class="mr-2" href="#">{{ author.author_name }}</a>
+                    {% endfor %}
+                    <small class="text-muted">{{ book.published_year }}</small>
+                </div>
+                <h2><a class="article-title" href="{% url 'audit' book.ISBN %}">{{ book.title }}</a></h2>
+                <p class="article-content"> {{ book.price }} </p>
+            </div>
+        </article>
+    {% endfor %}
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
