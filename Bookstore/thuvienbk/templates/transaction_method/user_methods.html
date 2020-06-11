@@ -1,0 +1,33 @@
+{% extends '_base.html' %}
+{% block title %}Transaction Method{% endblock %}
+{% block content %}
+<legend class="border-bottom mb-4">Your methods</legend>
+<a class="btn btn-secondary btn-sm mt-1 mb-5" href="{% url 'method-create' %}">Add Method</a>
+<div class="container" align="center">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr style="text-align:center">
+                    <th>Wallet Address</th>
+                    <th>Private Key</th>
+                    <th>Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in user.paymentmethod_set.all %}
+                <tr style="text-align:center">
+                    <td>{{ obj.wallet_address }}</td>
+                    <td>{{ obj.private_key }}</td>
+                    <td>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'method-update' obj.id %}">Update</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'method-delete' obj.id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
