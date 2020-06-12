@@ -7,24 +7,24 @@ const ethUtil = require('ethereumjs-util');
 
 const ETH = require('../../config/constants').ETH;
 const API_KEY = ETH.API_KEY;
-const URL = ETH.MAINNET;
+const URL = ETH.TESTNET;
 
-function getNonce(address){
-    return fetch(
-          `${URL}/api?module=proxy&action=eth_getTransactionCount&tag=latest&address=${address}&apikey=${API_KEY}`
-        ).then(response => response.json()).then(e => {
-              return e.result
-          })
+function getNonce(address) {
+  return fetch(
+    `${URL}/api?module=proxy&action=eth_getTransactionCount&tag=latest&address=${address}&apikey=${API_KEY}`
+  ).then(response => response.json()).then(e => {
+    return e.result
+  })
 }
 module.exports = {
-  sendTransaction : async (req,res,next) => {
-    let addressFrom = req.body.senderAddress
+  sendTransaction: async (req, res, next) => {
+    let addressFrom = req.senderAddress
     let addressTo = req.body.destinationAddress
     let value = req.body.amount
 
     let gasPrice = parseFloat(req.body.gasPrice);
     let gasLimit = parseInt(req.body.gasLimit);
-    
+
     if (Number.isNaN(gasPrice) || gasPrice <= 0) {
       res.status(400).json({
         error: "Invalid Gas Price"
@@ -57,109 +57,120 @@ module.exports = {
       const rawTx = '0x' + serializedTx.toString('hex');
       return fetch(
         `${URL}/api?module=proxy&action=eth_sendRawTransaction&hex=${rawTx}&apikey=${API_KEY}`
-          ).then(response => response.json()).then(e => {
-            if(e.error !== undefined){
-              return res.status(404).json({
-                error : e.error
-              })
-            }
-            return res.status(200).json({
-              status : "success",
-              message : {
-                network : "ETH",
-                txid : e.result
-              }
-            })
+      ).then(response => response.json()).then(e => {
+        if (e.error !== undefined) {
+          return res.status(404).json({
+            error: e.error
           })
-    }catch(error){
+        }
+        return res.status(200).json({
+          status: "success",
+          message: {
+            network: "ETH",
+            txid: e.result
+          }
+        })
+      })
+    } catch (error) {
       res.status(404).json({
-        error : "fail"
+        error: "fails"
       })
     }
   },
-  getTransaction : async (req,res,next) => {
+  getTransaction: async (req, res, next) => {
     let txhash = req.params.txhash;
-    let ethPlorer = await fetch(`http://api.ethplorer.io/getTxInfo/${txhash}?apiKey=freekey`).then(response => response.json()).then(response =>{
+    // let ethPlorer = await fetch(`http://api.ethplorer.io/getTxInfo/${txhash}?apiKey=freekey`).then(response => response.json()).then(response =>{
+    //   console.log(response);
+    //   return response;
+    // }).catch(error =>{
+    //   return error;
+    // })
+    let ethPlorer = await fetch(`https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=${txhash}&apikey=1Z9HTNFTIJ91N3DUQ54VRGKKS2PNSCW4B5`).then(response => response.json()).then(response => {
+      // console.log(response);
       return response;
-    }).catch(error =>{
+    }).catch(error => {
       return error;
     })
-    try{
+    // console.log(ethPlorer);
+    try {
       return fetch(
         `${URL}/api?module=proxy&action=eth_getTransactionByHash&txhash=${txhash}&apikey=${API_KEY}`
-        ).then(response => response.json()).then(response => {
-            try{
-              res.status(200).json({
-                status : "success",
-                 message : {
-                  network : "ETH",
-                  txID : txhash,
-                  time : new Date(ethPlorer.timestamp * 1000).toISOString().slice(0, 19).replace('T', ' '),
-                  confirmation : ethPlorer.confirmations.toString(),
-                  blockhash : response.result.blockHash,
-                  blocknumber : (parseInt(response.result.blockNumber,16)).toString(),
-                  inputs : [{
-                    from_address:response.result.from
-                  }],
-                  outputs : [{
-                    to_address:response.result.to
-                  }],
-                  outcome:[{
-                    status: ethPlorer.success,
-                    value:(parseInt(response.result.value,16) / Math.pow(10,18)).toString(),
-                    gasLimit:parseInt(response.result.gas,16).toString(),
-                    gasPrice:parseInt(response.result.gasPrice,16).toString(),
-                    gasUsed: ethPlorer.gasUsed.toString(),
-                    nonce:parseInt(response.result.nonce,16).toString(),
-                    input:response.result.input,
-                    transactionIndex:parseInt(response.result.transactionIndex,16).toString(),
-                  }]
-                }
-              })
-            }catch(error){
-              res.status(404).json({
-                error : "fail"
-              })
+      ).then(response => response.json()).then(response => {
+        console.log(response);
+        try {
+          console.log('Log1')
+          res.status(200).json({
+            status: "success",
+            message: {
+              network: "ETH",
+              txID: txhash,
+              // time : new Date(ethPlorer.timestamp * 1000).toISOString().slice(0, 19).replace('T', ' '),
+              // confirmation : ethPlorer.confirmations.toString(),
+              blockhash: response.result.blockHash,
+              blocknumber: (parseInt(response.result.blockNumber, 16)).toString(),
+              inputs: [{
+                from_address: response.result.from
+              }],
+              outputs: [{
+                to_address: response.result.to
+              }],
+              outcome: [{
+                // status: ethPlorer.success,
+                value: (parseInt(response.result.value, 16) / Math.pow(10, 18)).toString(),
+                gasLimit: parseInt(response.result.gas, 16).toString(),
+                gasPrice: (parseInt(response.result.gasPrice, 16) / Math.pow(10, 18)).toString(),
+                // gasUsed: ethPlorer.gasUsed.toString(),
+                // nonce: parseInt(response.result.nonce, 16).toString(),
+                // input: response.result.input,
+                // transactionIndex: parseInt(response.result.transactionIndex, 16).toString(),
+              }]
             }
-        })
-      }catch(error){
-        res.status(404).json({
-          error : "fail"
-        })
-      }
+          })
+        } catch (error) {
+          res.status(404).json({
+            error: "fail1",
+            error1: error
+          })
+        }
+      })
+    } catch (error) {
+      res.status(404).json({
+        error: "fail",
+      })
+    }
   },
-  getTransactionFee : (req,res,next) => {
+  getTransactionFee: (req, res, next) => {
 
   },
-  getUserBalance : async (req,res,next) => {
+  getUserBalance: async (req, res, next) => {
     let address = req.params.address
-    try{
+    try {
       return fetch(
         `${URL}/api?apikey=${API_KEY}&module=account&action=balance&address=${address}&tag=latest`
-        ).then(response => response.json()).then(response => {
-            try{
-              res.status(200).json({
-                status : "success",
-                message : {
-                  network : "ETH",
-                  address : address,
-                  balance : (response.result / (Math.pow(10,18))).toString()
-                }
-              })
-            }catch(error){
-              res.status(404).json({
-                error : "fail"
-              })
+      ).then(response => response.json()).then(response => {
+        try {
+          res.status(200).json({
+            status: "success",
+            message: {
+              network: "ETH",
+              address: address,
+              balance: (response.result / (Math.pow(10, 18))).toString()
             }
-        })
-      }catch(error){
-        res.status(404).json({
-          error : "fail"
-        })
-      }
+          })
+        } catch (error) {
+          res.status(404).json({
+            error: "fail"
+          })
+        }
+      })
+    } catch (error) {
+      res.status(404).json({
+        error: "fail"
+      })
+    }
 
   },
-  generateUserAddress : async (req,res,next) => {
+  generateUserAddress: async (req, res, next) => {
     const mnemonic = bip39.generateMnemonic(); //generates string(
     const seed = await bip39.mnemonicToSeed(mnemonic); //creates seed buffer
     const root = hdkey.fromMasterSeed(seed);
@@ -170,21 +181,21 @@ module.exports = {
     const address = ethUtil.toChecksumAddress(addr);
     const privateKey = ethUtil.bufferToHex(addrNode._privateKey)
     const account = {
-        address: address,
-        privateKey: privateKey
+      address: address,
+      privateKey: privateKey
     };
-    if(account){
+    if (account) {
       res.status(200).json({
-        status : "success",
-        message : {
-          network : "ETH",
+        status: "success",
+        message: {
+          network: "ETH",
           address: address,
           privateKey: privateKey.substring(2)
         }
       })
-    }else{
+    } else {
       res.status(404).json({
-        error : "fail"
+        error: "fail"
       })
     }
   },
