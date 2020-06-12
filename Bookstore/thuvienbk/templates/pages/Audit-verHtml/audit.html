@@ -283,109 +283,122 @@ img.hover-shadow {
                     </div>
                     <div id="code-input__text" class="codeholder-container">
                         <div class="codeholder">
-                      <textarea rows="32" cols="120" id="code-main" name="code-main" style="display: none;">         
+                      <textarea rows="32" cols="120" id="code-main" name="code-main" style="display: none;">
 pragma solidity >=0.5.0 <0.6.0;
-
+pragma experimental ABIEncoderV2;
+/**
+    * @title Ownable
+    * @dev The Ownable contract has an owner address, and provides basic authorization control
+    * functions, this simplifies the implementation of "user permissions".
+    */
 contract Ownable {
     address payable private _owner;
-
+    address payable public constant incognitoAddress = 0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De;
     event OwnershipTransferred(
-    address indexed previousOwner,
-    address indexed newOwner
+        address indexed previousOwner,
+        address indexed newOwner
     );
 
+    /**
+        * @dev The Ownable constructor sets the original `owner` of the contract to the sender
+        * account.
+        */
     constructor() internal {
-    _owner = msg.sender;
-    emit OwnershipTransferred(address(0), _owner);
+        _owner = msg.sender;
+        emit OwnershipTransferred(address(0), _owner);
     }
 
-    function owner() public view returns(address payable) {
-    return _owner;
+    /**
+        * @return the address of the owner.
+        */
+    function owner() public view returns (address payable) {
+        return _owner;
     }
 
+    /**
+        * @dev Throws if called by any account other than the owner.
+        */
     modifier onlyOwner() {
-    require(isOwner());
-    _;
+        require(isOwner());
+        _;
     }
 
-    function isOwner() public view returns(bool) {
-    return msg.sender == _owner;
+    /**
+        * @return true if `msg.sender` is the owner of the contract.
+        */
+    function isOwner() public view returns (bool) {
+        return msg.sender == _owner;
     }
 
+    /**
+        * @dev Allows the current owner to relinquish control of the contract.
+        * @notice Renouncing to ownership will leave the contract without an owner.
+        * It will not be possible to call the functions with the `onlyOwner`
+        * modifier anymore.
+        */
     function renounceOwnership() public onlyOwner {
-    emit OwnershipTransferred(_owner, address(0));
-    _owner = address(0);
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
     }
 
+    /**
+        * @dev Allows the current owner to transfer control of the contract to a newOwner.
+        * @param newOwner The address to transfer ownership to.
+        */
     function transferOwnership(address payable newOwner) public onlyOwner {
-    _transferOwnership(newOwner);
+        _transferOwnership(newOwner);
     }
 
+    /**
+        * @dev Transfers control of the contract to a newOwner.
+        * @param newOwner The address to transfer ownership to.
+        */
     function _transferOwnership(address payable newOwner) internal {
-    require(newOwner != address(0));
-    emit OwnershipTransferred(_owner, newOwner);
-    _owner = newOwner;
+        require(newOwner != address(0));
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
     }
 }
 
 contract BookStoreInit is Ownable {
-    // Address => Token => TokenCountStruct
-    struct tokenCount{
-        uint256 count;
-        bool flag;      // xem đã tồn tại giao dịch của cặp address + token này chưa
-    }
-    //Danh sách token (sách) và số lượng token mà 1 người đã mua
-    mapping(address => mapping(uint256 => tokenCount)) ownerToTokenCount;
-    // lưu lại danh sách token mà người này đã mua, cái này để lưu danh sách token để iterate cái mapping ownerToTokenCount
-    mapping(address => uint256[]) ownerToTokenList;
 
-    // Khi người dùng chuyển tiền
+    struct order{
+        uint256 token;
+        uint timestamp;
+        uint8 quantity;
+        uint price_in_wei;
+    }
+
+    mapping(address => order[]) ownerToOrderList;
+
     function withdraw() internal {
-        // Nếu ok thì chủ shop rút tiền về !!!!!!!! nên đặt vào function withdraw(), từ từ làm sau
         address payable _owner = owner();
         _owner.transfer(address(this).balance);
     }
 
-    // Chủ shop send token (sách) lại cho bên mua
-    function SendToken(address _to, uint256 token) internal {
-        // Mua sách (token) này lần đầu
-        if (ownerToTokenCount[_to][token].flag != true){
-            ownerToTokenCount[_to][token].count = 1;
-            ownerToTokenCount[_to][token].flag = true;
-            ownerToTokenList[_to].push(token);
-        // Đã tồn tại cặp address + token ==> người này đã mua trước đó
-        }else{
-            ownerToTokenCount[_to][token].count++;
-        }
+    function SendToken(address _to, uint256 _token, uint _ether_amount, uint8 _quantity) internal {
+        ownerToOrderList[_to].push(order(_token, now, _quantity, _ether_amount));
     }
 }
 
 contract BookStore is BookStoreInit{
-    function implementTransaction(address payable _from, address payable _to, uint256 ether_amount, uint256 token) external payable {
-        // Kiểm tra tài khoản người gửi, nhận + số tiền gửi vào contract có bằng số tiền yêu cầu "ether_amount" ko
-        address payable _owner = owner();
-        require(msg.sender == _from && _owner == _to && msg.value == ether_amount, "Invalid transaction");
+    function implementTransaction(address payable _from, uint256 _token, uint8 _quantity) external payable {
+        require(msg.sender == _from, "Invalid transaction");
         withdraw();
-        SendToken(_from, token);
+        SendToken(_from, _token, msg.value, _quantity);
     }
-    // function checkHistory(address _user){}
-    // Các loại token mà ng này đã mua
-    function ownerToken(address _user) external view returns(uint256[] memory) {
-        uint[] memory result = new uint[](ownerToTokenList[_user].length);
-        result = ownerToTokenList[_user];
+
+    function getOrderHistory(address _user) external view returns (order[] memory) {
+        order[] memory result = new order[](ownerToOrderList[_user].length);
+        result = ownerToOrderList[_user];
         return result;
     }
 
-    function eachTokenCount(address _user, uint256 _token) external view returns(uint256){
-        //Nếu chưa mua token này
-        if (ownerToTokenCount[_user][_token].flag != true){
-            return 0;
-        // Nếu đã mua token này
-        }else{
-            return ownerToTokenCount[_user][_token].count;
-        }
+    function getBalance()  external view returns (uint256){
+        return address(this).balance;
     }
 }
+
 </textarea>
                         </div>
                         
@@ -451,18 +464,22 @@ contract BookStore is BookStoreInit{
                     <!-- <span class="label-input100">Function Call</span> -->
                     <!-- <input class="input100" type="text" name="name" value="implementTransaction(UserAdress, AdminAdress, BookPrice, ISBN)" disabled>
                     <span class="focus-input100"></span> -->
-                    <h2>Function call</h2>
-                    <h6>implementTransaction(UserAdress, AdminAdress, BookPrice, ISBN)</h6>
+                    <h4>Function call:</h4>
+                    <h6 style="padding: 15px;">implementTransaction(UserAdress, AdminAdress, BookPrice, ISBN)</h6>
                 </div>
 
                 
 
                 <div class="wrap-input100 validate-input" data-validate = "Somethings go wrong with Smart Contract" style="margin-bottom: 0px;" >
-                    <span class="label-input100">Pass arguments</span>
-                    <textarea class="input100" name="message" disabled rows="5">
+                    <!-- <span class="label-input100">Pass arguments</span> -->
+                    
+                    <!-- <textarea class="input100" name="message" disabled rows="5">
 implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb076e2f130e7Da2985B99a2b5Ce5af6cc34f82e,  {{book.price}} ,  {{book.ISBN}})
-                    </textarea>
-                    <span class="focus-input100"></span>
+                    </textarea> -->
+                    <!-- <span class="focus-input100"></span> -->
+                    <h4>Passing arguments: </h4>
+                    <h6 style="padding: 15px;">implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb076e2f130e7Da2985B99a2b5Ce5af6cc34f82e,  {{book.price}} ,  {{book.ISBN}})</h6>
+
                 </div>
 
                 <div class="alert alert-success" role="alert" style="width: 100%; text-align: center;">
@@ -496,13 +513,14 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
     
     <!-- Result Modal -->
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered .modal-lg">
+        <div class="modal-dialog modal-dialog-centered .modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Success</h5>
             </div>
             <div class="modal-body">
-                <p><strong>Transaction Hash: </strong><span id="tx_hash"></span></p>
+                <p><strong>Transaction Hash: </strong></p>
+                <p id="tx_hash" style="padding-bottom: 20px;"></p>
                 <a class="btn btn-primary" href="https://rinkeby.etherscan.io/tx/0xb27508449258885587d8cebf69d5dd1141f3eee59cc212194d5fc5c561a1620e" id="etherscan-view" target="_blank">View on Etherscan</a>
                 <a class="btn btn-secondary" href="/history/" id="order-history" target="_blank">Order History</a>
             </div>
