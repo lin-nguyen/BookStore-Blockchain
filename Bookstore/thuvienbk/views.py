@@ -22,11 +22,45 @@ class HomePageView(TemplateView):
 
 class AboutPageView(TemplateView):
     template_name = 'pages/about.html'
+    
 
 
 class HistoryPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/history.html'
+    def get_context_data(self, *args, **kwargs):
+        context = super(HistoryPageView, self).get_context_data(*args, **kwargs)
 
+        # Get user address
+        user_address = PaymentMethod.objects.get(user_id= self.request.user.id).wallet_address
+
+        # Implement web3
+        # Connecting to web3 + Initiating web3
+        url = 'https://rinkeby.infura.io/v3/95b9bf5b38fb4b9d939b3ae99cfa8386'
+        web3 = Web3(Web3.HTTPProvider(url))
+
+        # Contract address + abi
+        contract_address = web3.toChecksumAddress("0x30d9072A565be8C25580e442C872aF6421b26cD8")
+        abi = json.loads('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getOrderHistory","outputs":[{"components":[{"internalType":"uint256","name":"token","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint8","name":"quantity","type":"uint8"},{"internalType":"uint256","name":"price_in_wei","type":"uint256"}],"internalType":"struct BookStoreInit.order[]","name":"","type":"tuple[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_from","type":"address"},{"internalType":"uint256","name":"_token","type":"uint256"},{"internalType":"uint8","name":"_quantity","type":"uint8"}],"name":"implementTransaction","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"incognitoAddress","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]')
+
+        #Creating contract instance
+        contract = web3.eth.contract(contract_address, abi=abi)
+
+        # Request view orders list
+        result = contract.functions.getOrderHistory(user_address).call()
+        print("Order list: ")
+
+        # print(result)
+
+        data = {}
+        count = 0
+        for item in result:
+            data[count] = (json.dumps(item))
+            count += 1
+            print(item)
+
+        print(data)
+        context['tx_list'] = data
+        return context
 
 class ProfileView(LoginRequiredMixin, View):
 
