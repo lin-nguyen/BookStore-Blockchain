@@ -75,9 +75,6 @@ def audit_result(request):
         #     'count': 28
         # }
 
-        # Owner address
-        owner = "0xAb076e2f130e7Da2985B99a2b5Ce5af6cc34f82e"
-
         # Get user info
         user_address = PaymentMethod.objects.get(user_id= request.user.id).wallet_address
         user_pkey = PaymentMethod.objects.get(user_id= request.user.id).private_key
@@ -85,6 +82,7 @@ def audit_result(request):
         # Get book price
         book_price = Book.objects.get(ISBN=request.POST['isbn']).price
         book_isbn = Book.objects.get(ISBN=request.POST['isbn']).ISBN
+        book_quantity = 1
 
         # Implement web3
         # Connecting to web3 + Initiating web3
@@ -92,8 +90,8 @@ def audit_result(request):
         web3 = Web3(Web3.HTTPProvider(url))
 
         # Contract address + abi
-        contract_address = web3.toChecksumAddress("0xE498c05E9589c126f9A66A7841AF19c5824d0193")
-        abi = json.loads('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":true,"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_token","type":"uint256"}],"name":"eachTokenCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_from","type":"address"},{"internalType":"address payable","name":"_to","type":"address"},{"internalType":"uint256","name":"ether_amount","type":"uint256"},{"internalType":"uint256","name":"token","type":"uint256"}],"name":"implementTransaction","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"ownerToken","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]')
+        contract_address = web3.toChecksumAddress("0x30d9072A565be8C25580e442C872aF6421b26cD8")
+        abi = json.loads('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getOrderHistory","outputs":[{"components":[{"internalType":"uint256","name":"token","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint8","name":"quantity","type":"uint8"},{"internalType":"uint256","name":"price_in_wei","type":"uint256"}],"internalType":"struct BookStoreInit.order[]","name":"","type":"tuple[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_from","type":"address"},{"internalType":"uint256","name":"_token","type":"uint256"},{"internalType":"uint8","name":"_quantity","type":"uint8"}],"name":"implementTransaction","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"incognitoAddress","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]')
 
         #Creating contract instance
         contract = web3.eth.contract(contract_address, abi=abi)
@@ -102,11 +100,11 @@ def audit_result(request):
         #print(web3.eth.blockNumber)
 
 
-        # Prepare Implement transaction
+        #Prepare Implement transaction
         nonce = web3.eth.getTransactionCount(user_address)
-        tx = contract.functions.implementTransaction(user_address, owner, web3.toWei(book_price, "ether"), book_isbn).buildTransaction({
+        tx = contract.functions.implementTransaction(user_address, book_isbn, book_quantity).buildTransaction({
             'from': user_address,
-            'value': web3.toWei(book_price, "ether"),
+            'value': web3.toWei(book_price*book_quantity, "ether"),
             'nonce': nonce
         })
 
@@ -114,17 +112,16 @@ def audit_result(request):
         tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
         tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
         print("Transaction receipt: ")
-        print(tx_receipt)
+        print(tx_receipt.transactionHash)
 
-
-        # Request view owned token list
-        result = contract.functions.ownerToken(user_address).call()
-        print("Token list: ")
-        print(result)
+        # Request view orders list
+        # result = contract.functions.getOrderHistory(user_address).call()
+        # print("Order list: ")
+        # print(result)
         
         # Phải làm kiểu này để data có dạng json
         data = {}
-        data['result'] = result
+        data['tx'] = tx_receipt.transactionHash.hex()
         return JsonResponse(data)
     # else:
     #     return render(request, 'pages/Audit-verHtml/audit.html', context)

@@ -440,7 +440,7 @@ contract BookStore is BookStoreInit{
             <form class="contact100-form validate-form" action="{% url 'about' %}" method="GET">
                 
                 <div class="alert alert-info" role="alert" style="width: 100%; text-align: center;">
-                    <h4 class="alert-heading">Before transaction:</h4>
+                    <h4 class="alert-heading">Before:</h4>
                     <p><strong>Your address:</strong> {{ user.paymentmethod_set.first.wallet_address }}</p>
                     <p><strong>Your balance:</strong> <span id="balance-before"></span></p>
                 </div>
@@ -454,32 +454,15 @@ contract BookStore is BookStoreInit{
                 
 
                 <div class="wrap-input100 validate-input" data-validate = "Somethings go wrong with Smart Contract" style="margin-bottom: 0px;" >
-                    <span class="label-input100">Result</span>
+                    <span class="label-input100">Pass arguments</span>
                     <textarea class="input100" name="message" disabled rows="5">
 implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb076e2f130e7Da2985B99a2b5Ce5af6cc34f82e,  {{book.price}} ,  {{book.ISBN}})
                     </textarea>
-                    <!-- Test-2 lua key
-                            Command to deploy Smart Contract:
-                            -> Sendeth(0xe880f32e33061919d09811eee00ee94392cd4fde,
-                                       0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae, 15)           
-                            -> Sendkey(0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae,
-                                       0xe880f32e33061919d09811eee00ee94392cd4fde, 1)
-                            ----------------------------------------------------------
-                            After Symbolic Execution:
-                            ->Inital state:
-                                (UserAdress, 100, 0)
-                            ->Final state:
-                                (UserAdress, 85, 1)
-                        -->
-
-                        <!-- Test-3 dung
-                         
-                        -->
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="alert alert-success" role="alert" style="width: 100%; text-align: center;">
-                    <h4 class="alert-heading">After transaction:</h4>
+                    <h4 class="alert-heading">After:</h4>
                     <p><strong>Your address:</strong> {{ user.paymentmethod_set.first.wallet_address }}</p>
                     <p><strong>Your balance:</strong> Unknown</p>
 
@@ -503,21 +486,36 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
             </span>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
+    </div>
+    </div>
+    </div>
+    
+    <!-- Result Modal -->
+    <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered .modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Success</h5>
+            </div>
+            <div class="modal-body">
+                <p><strong>Transaction Hash: </strong><span id="tx_hash"></span></p>
+                <a class="btn btn-primary" href="https://rinkeby.etherscan.io/tx/0xb27508449258885587d8cebf69d5dd1141f3eee59cc212194d5fc5c561a1620e" id="etherscan-view" target="_blank">View on Etherscan</a>
+                <a class="btn btn-secondary" href="/history/" id="order-history" target="_blank">Order History</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+            </div>
+        </div>
         </div>
     </div>
-            
-        </div>
 
-
+</body>
     <footer class="footer">
         <div class="content-container">
             <div class="container">
                 <div style="color:white" align="center">
                         <p> Create by <a target="_blank">BK's team</a>. <img src="{% static 'audit/images/hcmut.png' %}" style="width: 70px; padding-left: 20px;"> </p>
                     </div>
-                    <form action="{% url 'about' %}" method="GET">
-                        <button type="submit">Please submit the form</button>
-                    </form>
                 <!-- /.footer__inner -->
             </div>
         </div>
@@ -525,13 +523,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
 </div>
 <!-- alert(""); -->
 <script>
-    //console.log('{{ book.authors }}');
-    //console.log('{{ user.email }}');
-    //console.log('{{ user.paymentmethod_set.all }}');
-    //{% for obj in user.paymentmethod_set.all %}
-    //console.log('{{ user.paymentmethod_set.first.wallet_address }}');
-    //{% endfor %}
-    
+
     // Fetch address balance before transaction
     fetch("http://localhost:3003/ETH/user/balance/" + "{{ user.paymentmethod_set.first.wallet_address }}").then((response) => {
         response.json().then((data) => {
@@ -548,7 +540,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
 function myFunction() {
     //alert("Transfering ....!");
     $(".contact100-form-btn span").text("Pending ...");
-    $(".contact100-form-btn").css("background-color", "rgb(88, 108, 210)");
+    $(".contact100-form-btn").css("background-color", "#42b127");
 
     $.ajax({
         type: "POST",
@@ -558,12 +550,14 @@ function myFunction() {
             isbn: '{{book.ISBN}}',
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
-        // data: '{ "comment" }',
         success: function (result) {
             //alert("Successd!");
             console.log(result);
-            $(".contact100-form-btn span").text("Success");
-            $(".contact100-form-btn").css("background-color", "#12b955");
+            $(".contact100-form-btn").hide();
+            $("#modal-confirmation").modal('hide');
+            $("#exampleModal").modal('show');
+            $("#tx_hash").text(result.tx);
+            $("#etherscan-view").attr("href", "https://rinkeby.etherscan.io/tx/" + result.tx)
         }
     });
 
