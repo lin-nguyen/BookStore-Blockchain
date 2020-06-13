@@ -181,6 +181,7 @@ img.hover-shadow {
 	<link rel="stylesheet" type="text/css" href="{% static 'audit/vendor/daterangepicker/daterangepicker.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'audit/css/util.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'audit/css/main.css' %}">
+    <script src="{% static 'audit/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 
 
     <script>
@@ -419,19 +420,23 @@ contract BookStore is BookStoreInit{
         <span class="close cursor" onclick="closeModal()" data-dismiss="modal">&times;</span>
       <div class="modal1-content">
         <div class="mySlides">
-            <div class="figcaption">Function: Constructor</div>
-            <img src="{% static "images/constructor.png" %}" style="width:100%;">
+            <div class="figcaption">Function: implementTransaction</div>
+            <img src="{% static "images/implementTransaction.png" %}" style="width:100%;">
         </div>
 
         <div class="mySlides">
-            <div class="figcaption">Function: Sendeth</div>
-            <img src="{% static "images/sendeth.png" %}" style="width:100%">
+            <div class="figcaption">Function: SendToken</div>
+            <img src="{% static "images/SendToken.png" %}" style="width:100%">
         </div>
 
         <div class="mySlides">
-             <div class="figcaption">Function: Sendkey</div>
-                 <img src="{% static "images/sendkeyT.png" %}" style="width:100%">
+             <div class="figcaption">Function: getOrderHistory</div>
+                 <img src="{% static "images/getOrderHistory.png" %}" style="width:100%">
         </div>
+        <div class="mySlides">
+            <div class="figcaption">Function: withdraw</div>
+                <img src="{% static "images/withdraw.png" %}" style="width:100%">
+       </div>
 
         
         
@@ -493,7 +498,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
                 <div class="alert alert-success" role="alert" style="width: 100%; text-align: center;">
                     <h4 class="alert-heading">After:</h4>
                     <p><strong>Your address:</strong> {{ user.paymentmethod_set.first.wallet_address }}</p>
-                    <p><strong>Your balance:</strong> Unknown</p>
+                    <p><strong>Your balance:</strong> <span id="balance-after"></span></p>
 
                 </div>
 
@@ -560,7 +565,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
 <!-- alert(""); -->
 <script>
 
-    // Fetch address balance before transaction
+    // Fetch address balance before
     fetch("http://localhost:3003/ETH/user/balance/" + "{{ user.paymentmethod_set.first.wallet_address }}").then((response) => {
         response.json().then((data) => {
             if (data.error) {
@@ -568,9 +573,27 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
             } else {
                 console.log(data.message.balance);
                 $("#balance-before").text(data.message.balance);
+                
             }
         })
     })
+
+    // Fetch audit result
+    $.ajax({
+        type: "POST",
+        url: "{% url 'request' %}", 
+        dataType: 'json',
+        data: {
+            isbn: '{{book.ISBN}}',
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (result) {
+            //alert("Success!");
+            //console.log("Result neeeeeeee",result);
+            $("#balance-after").text(result.audit_result[3][0]/Math.pow(10,18));
+        },
+
+    });
 
 // Ham thuc hien giao dich
 function myFunction() {
@@ -642,7 +665,7 @@ function showSlides(n) {
 
 </script>
     {% block javascript %}
-	<script src="{% static 'audit/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+	
 	<script src="{% static 'audit/vendor/animsition/js/animsition.min.js' %}"></script>
 	<script src="{% static 'audit/vendor/bootstrap/js/popper.js' %}"></script>
 	<script src="{% static 'audit/vendor/bootstrap/js/bootstrap.min.js' %}"></script>

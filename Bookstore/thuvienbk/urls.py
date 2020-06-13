@@ -10,6 +10,8 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('purchase/', PurchasePageView.as_view(), name='purchase'),
     path('audit/book/<int:isbn>', views.audit_page_view, name='audit'),
+    #Get request thuc hien audit
+    path('audit/request', views.audit_request, name='request'),
     # Trang trả kết quả mua sách
     path('audit/result', views.audit_result, name='result'),
     # path('audit/<slug:name>', views.audit_page_view, name='audit'), using slug for creating meaningful urls

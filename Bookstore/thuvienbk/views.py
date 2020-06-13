@@ -7,8 +7,11 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 from web3 import Web3
 import json
+import collections
+from thuvienbk.solidity_parser import symbolic, parser
 # pprint de debug
 from pprint import pprint
+
 
 
 from django.shortcuts import get_object_or_404, render
@@ -97,6 +100,120 @@ def audit_page_view(request, isbn):
     print(context)
     return render(request, 'pages/Audit-verHtml/audit.html', context)
 
+################################ Phần của link ########################################
+
+def f_write(f, name, value, Type):
+    f.write(name)
+    f.write('=')
+    if Type=='str': 
+        f.write("\"")
+        f.write(str(value))
+        f.write("\"")
+    if Type=='dict' or Type=='number': 
+        f.write(str(value))
+    f.write('\n')
+def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book_isbn,book_quantity, book_price):
+    # cần build msg
+    
+    asttree = parser.parse_file("thuvienbk/BookStore.sol")
+    f = open("thuvienbk/renderToPython.py", 'w')
+    f.write(open('thuvienbk/init.py').read())
+    f_write(f, 'admin', admin, 'str')
+    f_write(f, 'user_address', user_address, 'str')
+    f_write(f, 'totalToken', totalToken, 'dict')
+    f.write("ownerToOrderList = collections.defaultdict(lambda : 0)\n")
+    f_write(f,"ownerToOrderList[user_address]", ownerToOrderList[user_address], 'dict')
+    f.write("ownerToOrderList[user_address]=convert(ownerToOrderList[user_address])\n")
+    f.write("ownerToBalance= collections.defaultdict(lambda : 0)\n")
+    f_write(f,"ownerToBalance[admin]", ownerToBalance[admin], 'number' )
+    f_write(f,"ownerToBalance[user_address]", ownerToBalance[user_address], 'number' )
+    f_write(f,"ownerToBalance['0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De']", ownerToBalance['0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De'], 'number' )
+    f_write(f,"book_quantity", book_quantity, 'number' )
+    f_write(f,"book_price", book_price, 'number' )
+    f_write(f,"book_isbn", book_isbn, 'str' )
+    f.write("msg = Msg(admin, user_address, book_price*book_quantity)\n")
+    f.write("ownerToBalance['0x0000'] = msg.value\n")
+    f.close()
+    f = open("thuvienbk/renderToPython.py", 'a+')
+    dse = symbolic.SymbolicExecution(asttree,f )
+    listFunc= dse.run()
+    f.close()
+
+    import thuvienbk.renderToPython as renderToPython
+    transaction = renderToPython.BookStore()
+    init = (renderToPython.admin,
+            
+            (renderToPython.ownerToBalance[renderToPython.admin],  
+            renderToPython.getSumToken(renderToPython.totalToken)), 
+            
+            renderToPython.user_address,
+            (renderToPython.ownerToBalance[renderToPython.user_address]+renderToPython.msg.value,
+            renderToPython.getSumToken(renderToPython.ownerToOrderList[renderToPython.user_address]) ))
+    transaction.implementTransaction(user_address, book_isbn, book_quantity )
+    final = (renderToPython.admin,
+            
+            (renderToPython.ownerToBalance[renderToPython.admin],  
+            renderToPython.getSumToken(renderToPython.totalToken)), 
+            
+            renderToPython.user_address,
+            (renderToPython.ownerToBalance[renderToPython.user_address],
+            renderToPython.getSumToken(renderToPython.ownerToOrderList[renderToPython.user_address]) ))
+
+    return init, final
+
+
+
+def audit_request(request):
+    if request.method == 'POST':
+        print("Im auditing...")
+
+        # Get user info
+        user_address = PaymentMethod.objects.get(user_id= request.user.id).wallet_address
+
+        # Get book price
+        book_price = Book.objects.get(ISBN=request.POST['isbn']).price
+        book_isbn = str(Book.objects.get(ISBN=request.POST['isbn']).ISBN)
+        book_quantity = 1
+
+        
+
+        # Implement web3
+        # Connecting to web3 + Initiating web3
+        url = 'https://rinkeby.infura.io/v3/95b9bf5b38fb4b9d939b3ae99cfa8386'
+        web3 = Web3(Web3.HTTPProvider(url))
+
+        # Contract address + abi
+        contract_address = web3.toChecksumAddress("0x30d9072A565be8C25580e442C872aF6421b26cD8")
+        abi = json.loads('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":true,"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getOrderHistory","outputs":[{"components":[{"internalType":"uint256","name":"token","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint8","name":"quantity","type":"uint8"},{"internalType":"uint256","name":"price_in_wei","type":"uint256"}],"internalType":"struct BookStoreInit.order[]","name":"","type":"tuple[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_from","type":"address"},{"internalType":"uint256","name":"_token","type":"uint256"},{"internalType":"uint8","name":"_quantity","type":"uint8"}],"name":"implementTransaction","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"incognitoAddress","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]')
+
+        #Creating contract instance
+        contract = web3.eth.contract(contract_address, abi=abi)
+
+        # Admin address
+        admin = contract.functions.owner().call()
+
+        ownerToOrderList= collections.defaultdict(lambda : 0)
+        ownerToOrderList[user_address] = contract.functions.getOrderHistory(user_address).call()
+        
+        ownerToBalance= collections.defaultdict(lambda : 0)
+
+        ownerToBalance[admin] = web3.eth.getBalance(admin)
+        ownerToBalance[user_address] =  web3.eth.getBalance(user_address)
+        ownerToBalance['0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De']= web3.eth.getBalance('0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De')
+        
+        totalToken = {book_isbn: 3, 'physics':12 , 'computer': 5}
+        
+        SC = runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken , book_isbn, book_quantity, book_price*pow(10,18))
+        data ={}
+        data['audit_result'] = SC[1]
+        print("Result neeeeeeeeeee: ")
+        print(SC[0])
+        print(SC[1])
+        return JsonResponse(data)
+
+################################ Hết phần của link ########################################
+
+
 def audit_result(request):
     if request.method == 'POST':
         print("Im listening...")
@@ -159,7 +276,6 @@ def audit_result(request):
         data['contract'] = tx_receipt.to
         data['block_number'] = tx_receipt.blockNumber
         data['gas'] = tx_receipt.gasUsed
-        
 
         return JsonResponse(data)
     # else:
