@@ -33,9 +33,9 @@
     //console.log('{{ tx_list }}');
     var arr = '{{tx_list}}'.split('&#39;');
     //console.log(Object.entries({{tx_list}}))
-    //console.log('arr: ', arr)
+    console.log('arr: ', arr)
 
-    arr.forEach((item, index)=>{
+    arr.reverse().forEach((item, index)=>{
         if (index%2 != 0){
             var tempArr = item.split(', ');
             tempArr[0] = tempArr[0].slice(1);

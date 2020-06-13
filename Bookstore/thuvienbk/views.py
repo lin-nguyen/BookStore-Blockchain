@@ -146,7 +146,7 @@ def audit_result(request):
         tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
         tx_receipt = web3.eth.waitForTransactionReceipt(tx_hash)
         print("Transaction receipt: ")
-        print(tx_receipt.transactionHash)
+        print(tx_receipt)
 
         # Request view orders list
         # result = contract.functions.getOrderHistory(user_address).call()
@@ -155,7 +155,12 @@ def audit_result(request):
         
         # Phải làm kiểu này để data có dạng json
         data = {}
-        data['tx'] = tx_receipt.transactionHash.hex()
+        data['tx_hash'] = tx_receipt.transactionHash.hex()
+        data['contract'] = tx_receipt.to
+        data['block_number'] = tx_receipt.blockNumber
+        data['gas'] = tx_receipt.gasUsed
+        
+
         return JsonResponse(data)
     # else:
     #     return render(request, 'pages/Audit-verHtml/audit.html', context)

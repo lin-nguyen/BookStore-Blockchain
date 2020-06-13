@@ -445,6 +445,14 @@ contract BookStore is BookStoreInit{
 
     <div id="modal-confirmation" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">
+
+            <!-- Spinning overlay -->
+            <div id="overlay">
+                <div id="justify-content-center align-items-center">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
             <div class="modal-content">
               <div class="modal-header">
                  <span class="input100 col-12 modal-title text-center">VERIFY FUCTION IN SMART CONTRACT</span>
@@ -465,7 +473,7 @@ contract BookStore is BookStoreInit{
                     <!-- <input class="input100" type="text" name="name" value="implementTransaction(UserAdress, AdminAdress, BookPrice, ISBN)" disabled>
                     <span class="focus-input100"></span> -->
                     <h4>Function call:</h4>
-                    <h6 style="padding: 15px;">implementTransaction(UserAdress, AdminAdress, BookPrice, ISBN)</h6>
+                    <h6 style="padding: 15px;">implementTransaction(UserAdress, ISBN, Quantity)</h6>
                 </div>
 
                 
@@ -478,7 +486,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
                     </textarea> -->
                     <!-- <span class="focus-input100"></span> -->
                     <h4>Passing arguments: </h4>
-                    <h6 style="padding: 15px;">implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb076e2f130e7Da2985B99a2b5Ce5af6cc34f82e,  {{book.price}} ,  {{book.ISBN}})</h6>
+                    <h6 style="padding: 15px;">implementTransaction( {{ user.paymentmethod_set.first.wallet_address }},  {{book.ISBN}}, 1)</h6>
 
                 </div>
 
@@ -516,16 +524,22 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
         <div class="modal-dialog modal-dialog-centered .modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Success</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Success <img src="{% static 'audit/images/tick.svg' %}" style="width: 20px; vertical-align: baseline;"></h5>
             </div>
             <div class="modal-body">
+                <!-- Info -->
                 <p><strong>Transaction Hash: </strong></p>
-                <p id="tx_hash" style="padding-bottom: 20px;"></p>
+                <p id="tx_hash"></p>
+                <p><strong>Contract address: </strong><span id='contract-address'></span></p>
+                <p><strong>Blocknumber: </strong><span id='block-number'></span></p>
+                <p style="padding-bottom: 20px;"><strong>Gas used: </strong><span id='gas-used'></span></p>
+
+                <!-- Link -->
                 <a class="btn btn-primary" href="https://rinkeby.etherscan.io/tx/0xb27508449258885587d8cebf69d5dd1141f3eee59cc212194d5fc5c561a1620e" id="etherscan-view" target="_blank">View on Etherscan</a>
                 <a class="btn btn-secondary" href="/history/" id="order-history" target="_blank">Order History</a>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                <a type="button" class="btn btn-warning" href="{% url 'home' %}">Back home</a>
             </div>
         </div>
         </div>
@@ -561,9 +575,10 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
 // Ham thuc hien giao dich
 function myFunction() {
     //alert("Transfering ....!");
-    $(".contact100-form-btn span").text("Pending ...");
-    $(".contact100-form-btn").css("background-color", "#42b127");
-
+    //$(".contact100-form-btn span").text("Pending ...");
+    //$(".contact100-form-btn").css("background-color", "#42b127");
+    document.getElementById("overlay").style.display = "flex";
+    $(".contact100-form-btn").hide();
     $.ajax({
         type: "POST",
         url: "{% url 'result' %}",  //0xdFC487AB9791D3c4E1704036Bc32bd8F901BD5D9
@@ -575,11 +590,14 @@ function myFunction() {
         success: function (result) {
             //alert("Successd!");
             console.log(result);
-            $(".contact100-form-btn").hide();
+            
             $("#modal-confirmation").modal('hide');
             $("#exampleModal").modal('show');
-            $("#tx_hash").text(result.tx);
-            $("#etherscan-view").attr("href", "https://rinkeby.etherscan.io/tx/" + result.tx)
+            $("#tx_hash").text(result.tx_hash);
+            $("#contract-address").text(result.contract);
+            $("#block-number").text(result.block_number);
+            $("#gas-used").text(result.gas);
+            $("#etherscan-view").attr("href", "https://rinkeby.etherscan.io/tx/" + result.tx_hash)
         }
     });
 
