@@ -1,7 +1,5 @@
-{% load staticfiles %}
-
 {% load static %}
-
+{% load staticfiles%}
 {% block content %}
 
 <!DOCTYPE html>
@@ -29,6 +27,7 @@
         ============================================= -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 		  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
 	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -37,6 +36,7 @@
 	<link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
 	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'css/chatbox.css' %}">
 	{% endblock %}
 
 </head>
@@ -45,7 +45,7 @@
 {% load staticfiles %}
 <header id="header">
 	<nav class="navbar navbar-expand-md">
-		<a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="" title=""/></a>
+		<a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="" title="" style="margin-left: 30px; margin-bottom: 60px;"/></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
 				aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -145,19 +145,16 @@
 					<p>Who are in extremely love with eco friendly system.</p>
 				</div>
 			</div>
-		</div>
+		</div> 
 		<div class="row">
 			<div class="active-course-carusel">
+				{% for book in books_highly %}
 				<div class="single-course item">
-					<img class="img-fluid" src="{% static 'images/c1.jpg' %}" alt="">
+					<img class="img-fluid book-image" src="{{book.bookimage.image.url}}">
 					<p class="sale-btn">Out of Stocks</p>
 					<div class="details">
-						<a href="#"><h4>Breakthrough Thinking <span
-								class="price float-right">15 ETH</span></h4></a>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-							ut labore et dolore magna
-						</p>
+						<a href="/audit/book/{{book.ISBN}}"><h4>{{book.title}} <span
+								class="price float-right">{{book.price}} ETH</span></h4></a>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
@@ -165,46 +162,14 @@
 						<span class="fa fa-star"></span>
 					</div>
 				</div>
-				<div class="single-course item">
-					<img class="img-fluid" src="{% static 'images/c2.jpg' %}" alt="">
-					<p class="sale-btn">Available</p>
-					<div class="details">
-						<a href="#"><h4>Montage, Toujours! <span
-								class="price float-right">25 ETH</span></h4></a>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-							ut labore et dolore magna
-						</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-					</div>
-				</div>
-				<div class="single-course item">
-					<img class="img-fluid" src="{% static 'images/c3.jpg' %}" alt="">
-					<p class="sale-btn">Hottest Books</p>
-					<div class="details">
-						<a href="#"><h4>Musicophilia <span class="price float-right">20 ETH</span>
-						</h4></a>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-							ut labore et dolore magna
-						</p>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star checked"></span>
-						<span class="fa fa-star "></span>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
+		<a href="/store/" class="see_more pull-right" style="font-size: 15px;">See All</a>
 	</div>
 </section>
 <!-- End course Area -->
-<footer class="footer">
+{% comment %} <footer class="footer">
 	<div class="content-container">
 		<div class="container">
 			<div style="color:black" align="center">
@@ -214,7 +179,242 @@
 			<!-- /.footer__inner -->
 		</div>
 	</div>
+</footer> {% endcomment %}
+<!--footer starts from here-->
+ 
+<footer class="footer">
+	<div class="container bottom_border">
+		<div class="row">
+			<div class=" col-sm-4 col-md col-sm-4  col-12 col">
+				<h5 class="headin5_amrc col_white_amrc pt2">Our Address</h5>
+				<!--headin5_amrc-->
+				<ul class="footer_ul_amrc">
+				<li><p><i class="fa fa-location-arrow" style ="margin-left:5px;"></i> 268 Lý Thường Kiệt, Phường 14, Quận 10, Hồ Chí Minh </p></li>
+				<li><p><i class="fa fa-phone" style ="margin-left:5px;"></i>  028 3864 7256 </p></li>
+				<li><p><i class="fa fa fa-envelope" style ="margin-left:5px;"></i> hcmut@gmail.com  </p></li>
+				</ul>
+			</div>
+			<div class=" col-sm-4 col-md  col-6 col">
+				<h5 class="headin5_amrc col_white_amrc pt2">Timing</h5>
+				<!--headin5_amrc-->
+				<ul class="footer_ul_amrc">
+					<li><a href="http://webenlance.com">Mon - Fri: 7am - 10pm</a></li>
+					<li><a href="http://webenlance.com">​​Saturday: 8am - 10pm</a></li>
+					<li><a href="http://webenlance.com">​Sunday: 8am - 11pm</a></li>
+				</ul>
+				<!--footer_ul_amrc ends here-->
+			</div>
+			<div class=" col-sm-4 col-md  col-6 col">
+				<h5 class="headin5_amrc col_white_amrc pt2">Help</h5>
+				<!--headin5_amrc-->
+				<ul class="footer_ul_amrc">
+					<li><a href="http://webenlance.com">Payment Methods</a></li>
+					<li><a href="http://webenlance.com">Shipping Rates & Policies</a></li>
+					<li><a href="http://webenlance.com">Returns & Replacements</a></li>
+					<li><a href="http://webenlance.com">Privacy Policy</a></li>
+					<li><a href="http://webenlance.com">FAQ’s</a></li>
+				</ul>
+			<!--footer_ul_amrc ends here-->
+			</div>
+			<div class=" col-sm-4 col-md  col-12 col">
+				<h5 class="headin5_amrc col_white_amrc pt2">Delivery Partner</h5>
+				<!--headin5_amrc ends here-->
+				<ul class="footer_ul2_amrc">
+					<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/loship.png'%}" width="80px" height="40px"/></a></p></li>
+					<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/ghn2.png'%}" width="80px" height="40px"/></a></p></li>
+					<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/Grab-express.png'%}" width="80px" height="40px"/></a></p></li>
+				</ul>
+				<!--footer_ul2_amrc ends here-->
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<ul class="foote_bottom_ul_amrc">
+			<li><a href="http://webenlance.com">Home</a></li>
+			<li><a href="http://webenlance.com">About</a></li>
+			<li><a href="http://webenlance.com">Services</a></li>
+			<li><a href="http://webenlance.com">Pricing</a></li>
+			<li><a href="http://webenlance.com">Blog</a></li>
+			<li><a href="http://webenlance.com">Contact</a></li>
+		</ul>
+		<!--foote_bottom_ul_amrc ends here-->
+		<p class="text-center" style="color: #CCC;">Copyright @2017 | Designed With by <a target="_blank">BK's team</a>. <img src="{% static 'audit/images/hcmut.png' %}"
+																	 style="width: 70px; padding-left: 20px;"></p> 
+
+		<ul class="social_footer_ul">
+			<li><a href="http://webenlance.com"><i class="fa fa-facebook-f" style="color: #4267B2"></i></a></li>
+			<li><a href="http://webenlance.com"><i class="fa fa-twitter" style="color: #1DA1F2"></i></a></li>
+			<li><a href="http://webenlance.com"><i class="fa fa-linkedin" style="color: #0073B0"></i></a></li>
+			<li><a href="http://webenlance.com"><i class="fa fa-instagram" style="color: #B71370"></i></a></li>
+		</ul>
+		<!--social_footer_ul ends here-->
+	</div>
 </footer>
+ <div class="fabs1">
+        <div class="chat">
+            <div class="chat_header">
+                <div class="chat_option">
+                    <div class="header_img">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>
+                    <span id="chat_head">Jane Doe</span>
+                    <br>
+                    <span class="agent">Agent</span>
+                    <span class="online">(Online)</span>
+                    <span id="chat_fullscreen_loader" class="chat_fullscreen_loader">
+                        <i class="fullscreen zmdi zmdi-window-maximize"></i>
+                    </span>
+
+                </div>
+
+            </div>
+            <div class="chat_body chat_login">
+                <a id="chat_first_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <p>We make it simple and seamless for businesses and people to talk to each
+                    other. Ask us anything</p>
+            </div>
+            <div id="chat_converse" class="chat_conversion chat_converse">
+                <a id="chat_second_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <span class="status">20m ago</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey! Would you like to talk sales, support, or anyone?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                <span class="status2">Just now. Not seen yet</span>
+            </div>
+            <div id="chat_body" class="chat_body">
+                <div class="chat_category">
+                    <a id="chat_third_screen" class="fab1">
+                        <i class="zmdi zmdi-arrow-right"></i>
+                    </a>
+                    <p>What would you like to talk about?</p>
+                    <ul>
+                        <li>Tech</li>
+                        <li class="active">Sales</li>
+                        <li >Pricing</li>
+                        <li>other</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div id="chat_form" class="chat_converse chat_form">
+                <a id="chat_fourth_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <span class="status">20m ago</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Agent typically replies in a few hours. Don't miss their reply.
+                    <div>
+                        <br>
+                        <form class="get-notified">
+                            <label for="chat_log_email">Get notified by email</label>
+                            <input id="chat_log_email" placeholder="Enter your email"/>
+                            <i class="zmdi zmdi-chevron-right"></i>
+                        </form>
+                    </div>
+                </span>
+
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Send message to agent.
+                    <div>
+                        <form class="message_form">
+                            <input placeholder="Your email"/>
+                            <input placeholder="Technical issue"/>
+                            <textarea rows="4" placeholder="Your message"></textarea>
+                            <button>Send</button>
+                        </form>
+
+                    </div>
+                </span>
+            </div>
+            <div id="chat_fullscreen" class="chat_conversion chat_converse">
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <div class="status">20m ago</div>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey! Would you like to talk sales, support, or anyone?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type
+                    specimen book.</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Where can I get some?</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>The standard chuck...</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    There are many variations of passages of Lorem Ipsum available</span>
+                <div class="status2">Just now, Not seen yet</div>
+                <span class="chat_msg_item ">
+                    <ul class="tags">
+                        <li>Hats</li>
+                        <li>T-Shirts</li>
+                        <li>Pants</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="fab_field">
+                <a id="fab_camera" class="fab1">
+                    <i class="zmdi zmdi-camera"></i>
+                </a>
+                <a id="fab_send" class="fab1">
+                    <i class="zmdi zmdi-mail-send"></i>
+                </a>
+                <textarea
+                    id="chatSend"
+                    name="chat_message"
+                    placeholder="Send a message"
+                    class="chat_field1 chat_message1"></textarea>
+            </div>
+        </div>
+        <a id="prime" class="fab1">
+            <i class="prime zmdi zmdi-comment-outline"></i>
+        </a>
+    </div>
 {% endblock content %}
 
 
@@ -252,6 +452,7 @@
 <script src="{% static 'js/mail-script.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/chatbox.js' %}"></script>
 <!-- <script type="text/javascript" src="{% static 'js/MainPa.js' %}"></script> -->
 {% endblock javascript %}
 

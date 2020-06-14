@@ -2,7 +2,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.utils.safestring import mark_safe
-from .models import CustomUser, UserProfile, BookCategory, BookAuthor, Book, BookPdf, BookImage, Transaction, PaymentMethod, Rating
+from .models import CustomUser, UserProfile, BookCategory, BookAuthor, Book, BookImage, Transaction, PaymentMethod, Rating
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
@@ -57,7 +57,6 @@ admin.site.register(BookAuthor, BookAuthorAdmin)
 admin.site.register(BookCategory, BookCategoryAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookImage)
-admin.site.register(BookPdf)
 admin.site.register(Transaction)
 admin.site.register(PaymentMethod)
 admin.site.register(Rating)

@@ -7,7 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('thuvienbk.urls')),
-    path('store/', include('book.urls')),
 
     # REST FRAMEWORK
     path('api/book/', include('book.api.urls', 'book_api'))
