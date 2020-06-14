@@ -10,9 +10,15 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('purchase/', PurchasePageView.as_view(), name='purchase'),
     path('audit/book/<int:isbn>', views.audit_page_view, name='audit'),
+    #Get request thuc hien audit
+    path('audit/request', views.audit_request, name='request'),
+    # Trang trả kết quả mua sách
+    path('audit/result', views.audit_result, name='result'),
     # path('audit/<slug:name>', views.audit_page_view, name='audit'), using slug for creating meaningful urls
     path('payment_methods', UserPaymentMethod.as_view(), name='payment-method'),
     path('method/new/', PaymentMethodCreate.as_view(), name='method-create'),
-    path('method/<int:pk>/update/', PaymentMethodUpdate.as_view(), name='method-update'),
-    path('method/<int:pk>/delete/', PaymentMethodDelete.as_view(), name='method-delete'),
+    path('method/<int:pk>/update/',
+         PaymentMethodUpdate.as_view(), name='method-update'),
+    path('method/<int:pk>/delete/',
+         PaymentMethodDelete.as_view(), name='method-delete'),
 ]

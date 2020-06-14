@@ -1,47 +1,59 @@
 {% extends '_base.html' %}
 {% block title %}Order History{% endblock %}
 {% block content %}
+{% load staticfiles %}
+{% load static %}
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script src="{% static 'audit/vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'audit/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <legend class="border-bottom mb-4">Transaction history</legend>
 <div class="container" align="center">
     <div class="row">
-        <div class="table-responsive">
+        <div class="table-responsive" style="z-index: 999; max-height: 70vh; overflow-y: scroll;">
             <table class="table table-bordered">
                 <thead>
                 <tr style="text-align:center">
+                    <th>Time</th>
                     <th>ISBN</th>
-                    <th>Title</th>
                     <th>Price</th>
-                    <th>Started</th>
-                    <th>Finished</th>
-                    <th>State</th>
-                    <th>Description</th>
+                    <th>Quantity</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for obj in user.transaction_set.all %}
-                <tr style="text-align:center">
-                    <td>{{ obj.book.ISBN }}</td>
-                    <td><a href="{% url 'home' %}">{{ obj.book.title }}</a></td>
-                    <td>{{ obj.book.price }} ETH</td>
-                    <td>{{ obj.start_time }}</td>
-                    <td>{{ obj.end_time }}</td>
-                    <td>
-                        {% if obj.state == 0 %}
-                        <div style="color:red;">Fail</div>
-                        {% elif obj.state == 1 %}
-                        <div style="color:green;">Success</div>
-                        {% elif obj.state == 2 %}
-                        <div style="color:blue;">Pending</div>
-                        {% else %}
-                        <div style="color:blue;">No information</div>
-                        {% endif %}
-                    </td>
-                    <td>{{ obj.description }}</td>
+                <tbody id="history-data">
+                <tr style="text-align:center" >
+
                 </tr>
-                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<script>
+    //console.log('{{ tx_list }}');
+    var arr = '{{tx_list}}'.split('&#39;');
+    //console.log(Object.entries({{tx_list}}))
+    console.log('arr: ', arr)
+
+    arr.reverse().forEach((item, index)=>{
+        if (index%2 != 0){
+            var tempArr = item.split(', ');
+            tempArr[0] = tempArr[0].slice(1);
+            tempArr[3] = tempArr[3].slice(0, -1);
+
+            // Chuyen dinh dang datetime
+            moment.locale('vi')
+            var d = moment.unix(tempArr[1]).format('LLL')
+            
+            //console.log(tempArr);
+            $("#history-data").append('<tr style="text-align:center"><td>' + d + '</td><td>' + tempArr[0] + '</td><td>' + tempArr[3]/1000000000000000000 + ' ETH</td><td>' + tempArr[2] + '</td></tr>')
+        }
+    })
+    //{{tx_list}}.forEach((item, index) => {
+    //    console.log(item);
+    //    var res = item.split(", ");
+    //    $("#history-data").append('<tr style="text-align:center"><td>' + res[0] + '</td><td>' + res[1] + '</td><td>' + res[2] + '</td><td>' + res[3] + '</td></tr>')
+    //})
+</script>
+
 {% endblock content %}

@@ -8,7 +8,7 @@ const URL = require('../../config/url_blockchain')
 
 fetch.Promise = Bluebird;
 
-const isTestNet = false
+const isTestNet = true
 
 var BTC_URL = URL.BTC
 var BTC_URL_TEST = URL.BTC_CHECK

@@ -8,7 +8,7 @@ fetch.Promise = Bluebird;
 const CONSTANT = require('../../config/constants')
 bitcore.Transaction.FEE_PER_KB = CONSTANT.BCH.BASIC_TX_FEE
 
-var isTestNet = false
+var isTestNet = true
 var network = bitcore.Networks.mainnet
 var BCH_URL = URL.BCH
 var BCH_URL_CHECK = URL.BCH_CHECK
