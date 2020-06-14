@@ -7,7 +7,6 @@ from django.db import models
 from PIL import Image
 from django.utils import timezone
 
-
 class CustomUser(AbstractUser):
     pass
 
@@ -16,8 +15,7 @@ class CustomUser(AbstractUser):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
@@ -38,9 +36,6 @@ class BookCategory(models.Model):
 
 class BookAuthor(models.Model):
     author_name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.author_name
 
 
 class Book(models.Model):
@@ -63,8 +58,7 @@ class Book(models.Model):
 
 class BookImage(models.Model):
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
-    image = models.ImageField(
-        default='book_default.jpg', upload_to='book_pics')
+    image = models.ImageField(default='book_default.jpg', upload_to='book_pics')
 
 
 class BookPdf(models.Model):
@@ -73,8 +67,7 @@ class BookPdf(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.OneToOneField(Book, on_delete=models.SET_NULL, null=True)
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(default=timezone.now, null=True)
@@ -83,8 +76,7 @@ class Transaction(models.Model):
 
 
 class PaymentMethod(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     wallet_address = models.CharField(max_length=100)
     private_key = models.CharField(max_length=100)
 
@@ -93,14 +85,11 @@ class PaymentMethod(models.Model):
 
 
 class Rating(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    point = models.IntegerField(default=0, validators=[
-                                MaxValueValidator(5), MinValueValidator(1)])
+    point = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(1)])
     comment = models.CharField(max_length=100)
 
-# HI HI HI HI HI
 
 # class PhongThuVien(models.Model):
 #     ma_so_phong = models.CharField(max_length=100,unique=True)
