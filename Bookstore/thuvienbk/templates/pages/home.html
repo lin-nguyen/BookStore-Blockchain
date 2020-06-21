@@ -55,25 +55,25 @@
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
 					<a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown">
-						<font size="3" color="#ffffff"> {{ user.email }}</font>
+						<font size=3 color="#ffffff"> {{ user.email }}</font>
 					</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+					<div class="dropdown-menu dropdown-menu-right menu" aria-labelledby="userMenu">
 						<a class="dropdown-item" href="{% url 'profile' %}">My profile</a>
-						<div class="dropdown-divider"></div>
+						<div class="dropdown-divider" style="margin: 0px;"></div>
 						<a class="dropdown-item" href="{% url 'payment-method' %}">Payment method</a>
-						<div class="dropdown-divider"></div>
+						<div class="dropdown-divider" style="margin: 0px;"></div>
 						<a class="dropdown-item" href="{% url 'account_change_password' %}">Change password</a>
-						<div class="dropdown-divider"></div>
+						<div class="dropdown-divider" style="margin: 0px;"></div>
 						<a class="dropdown-item" href="{% url 'history' %}">Order history</a>
-						<div class="dropdown-divider"></div>
+						<div class="dropdown-divider" style="margin: 0px;"></div>
 						<a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
 					</div>
 				</li>
 			</ul>
 			{% else %}
 			<form class="form-inline ml-auto">
-				<a href="{% url 'account_login' %}" class="btn btn-outline-secondary">Sign in</a>
-				<a href="{% url 'account_signup' %}" class="btn btn-primary ml-2">Sign up</a>
+				<a href="{% url 'account_login' %}" class="btn btn-outline-light">Sign in</a>
+				<a href="{% url 'account_signup' %}" class="btn btn-primary ml-2 mr-2">Sign up</a>
 			</form>
 			{% endif %}
 		</div>
@@ -153,8 +153,9 @@
 					<img class="img-fluid book-image" src="{{book.bookimage.image.url}}">
 					<p class="sale-btn">Out of Stocks</p>
 					<div class="details">
-						<a href="/audit/book/{{book.ISBN}}"><h4>{{book.title}} <span
-								class="price float-right">{{book.price}} ETH</span></h4></a>
+						<a href="/audit/book/{{book.ISBN}}"><h4>{{book.title}} </h4></a>
+						<span
+								class="price float-right">{{book.price}} ETH</span>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
 						<span class="fa fa-star checked"></span>
@@ -165,7 +166,13 @@
 				{% endfor %}
 			</div>
 		</div>
-		<a href="/store/" class="see_more pull-right" style="font-size: 15px;">See All</a>
+		<a href="/store/" class="cta">
+			<span>See More</span>
+			<svg width="13px" height="10px" viewBox="0 0 13 10">
+				<path d="M1,5 L11,5"></path>
+				<polyline points="8 1 12 5 8 9"></polyline>
+			</svg>
+		</a>
 	</div>
 </section>
 <!-- End course Area -->
@@ -262,9 +269,6 @@
                     <br>
                     <span class="agent">Agent</span>
                     <span class="online">(Online)</span>
-                    <span id="chat_fullscreen_loader" class="chat_fullscreen_loader">
-                        <i class="fullscreen zmdi zmdi-window-maximize"></i>
-                    </span>
 
                 </div>
 

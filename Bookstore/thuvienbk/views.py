@@ -25,7 +25,7 @@ class HistoryPageView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/history.html'
 
 class BookStoreView(TemplateView):
-    template_name = 'pages/book/book_list.html'
+    template_name = 'book/book_list.html'
     book_list = Book.objects.all()        
     def get_context_data(self, **kwargs):
         context = super(BookStoreView, self).get_context_data(**kwargs)
