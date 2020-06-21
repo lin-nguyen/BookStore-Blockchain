@@ -1,7 +1,16 @@
 {% extends '_base.html' %}
+{% load static %}
+{% load staticfiles %}
 {% block title %}Order History{% endblock %}
+ {% block css %}
+        <style>
+        .edit1 {
+            margin-bottom: 60px !important;
+        }
+    </style>
+    {% endblock %}
 {% block content %}
-<legend class="border-bottom mb-4">Transaction history</legend>
+<legend class="border-bottom mb-4" style="padding: 10px;">Transaction history</legend>
 <div class="container" align="center">
     <div class="row">
         <div class="table-responsive">
