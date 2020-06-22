@@ -8,7 +8,7 @@
 <form method="post">
     {% csrf_token %}
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4"  style="padding: 10px;">Edit Method</legend>
+        <legend class="border-bottom mb-4">Edit Method</legend>
         {{ form|crispy }}
     </fieldset>
     <button class="btn btn-outline-info" type="submit">Edit</button>

@@ -2621,7 +2621,6 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 .single-course .price {
   color: #f53f51;
-  font-size: 16px;
 }
 
 .single-course .details {
@@ -2634,9 +2633,6 @@ body.mobile-nav-active #mobile-nav-toggle {
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
-  font-size: 18px;
 }
 
 .single-course .details h4:hover {
@@ -2975,8 +2971,8 @@ h6 {
   margin-left: 20px;
 }
 .book-image {
-  width: 450px;
-  height: 500px;
+  width: 200px;
+  height: 400px;
 }
 #navbarCollapse {
     margin-top: 1px;
@@ -3021,103 +3017,3 @@ footer { width:100%; background-color:#263238 !important; min-height:250px; padd
 .social_footer_ul li { padding-left:20px; padding-top:10px; float:left; }
 .social_footer_ul li a { color:#CCC; border:1px solid #CCC; padding:8px;border-radius:50%;}
 .social_footer_ul li i {  width:20px; height:20px; text-align:center;}
-
-.menu.show {
-  top: auto;
-  right: 5px !important;
-  padding:  0;
-  width: 180px;
-}
-.menu.show a {
-  padding: 10px 24px;
-}
-.menu.show a:hover {
-  background-color: #d6d6d6;
-}
-.see_more {
-  font-size: 20px;
-  padding: 10px 20px;
-  background-color: #ff9700;
-  border: none;
-  text-align: center;
-  transition: all 0.5s;
-  cursor: pointer;
-}
-.see_more a {
-  color: white;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
-}
-.see_more span:after {
-  content: '\00bb';
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
-}
-.see_more:hover span {
-  padding-right: 25px;
-}
-
-.see_more:hover span:after {
-  opacity: 1;
-  right: 0;
-}
-.cta {
-	position: relative;
-	margin: auto;
-	padding: 19px 22px;
-  transition: all .2s ease;
-  float: right;
-}
-
-.cta:before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	display: block;
-	border-radius: 28px;
-	background: rgba(255, 171, 157, 0.5);
-	width: 56px;
-	height: 56px;
-	transition: all .3s ease;
-}
-
-.cta span {
-	position: relative;
-	font-size: 16px;
-	line-height: 18px;
-	font-weight: 900;
-	letter-spacing: .25em;
-	text-transform: uppercase;
-	vertical-align: middle;
-}
-
-.cta svg {
-	position: relative;
-	top: 0;
-	margin-left: 10px;
-	fill: none;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke: #111;
-	stroke-width: 2;
-	transform: translateX(-5px);
-	transition: all .3s ease;
-}
-
-.cta:hover:before {
-	width: 100%;
-	background: #ffab9d;
-}
-
-.cta:hover svg {
-	transform: translateX(0);
-}
-
-.cta:active {
-	transform: scale(0.96);
-}

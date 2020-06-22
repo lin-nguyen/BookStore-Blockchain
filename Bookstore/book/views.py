@@ -7,7 +7,7 @@ class BookListView(ListView):
     template_name = 'book/book_list.html'
     context_object_name = 'books'
     ordering = ['-sales_volume']
-    paginate_by = 4
+    paginate_by = 1
 
 
 class SearchedBookListView(ListView):
