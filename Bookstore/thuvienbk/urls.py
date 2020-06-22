@@ -15,5 +15,4 @@ urlpatterns = [
     path('method/new/', PaymentMethodCreate.as_view(), name='method-create'),
     path('method/<int:pk>/update/', PaymentMethodUpdate.as_view(), name='method-update'),
     path('method/<int:pk>/delete/', PaymentMethodDelete.as_view(), name='method-delete'),
-    path('store/', BookStoreView.as_view(), name='book-store')
 ]

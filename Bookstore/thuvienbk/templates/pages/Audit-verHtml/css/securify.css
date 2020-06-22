@@ -834,7 +834,8 @@ p:after {
 .desc-container p {
     margin-left: 40px;
     line-height: 120%;
-    max-width: 550px;
+    color: white;
+    width: 500px;
 }
 
 .top-container {
