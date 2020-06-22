@@ -1,7 +1,6 @@
 body{
     background:#f9f9fb;  
     font-family: 'Poppins', sans-serif;
-    font-size: 14px !important;
     }
     .view-account{
     background:#FFFFFF; 
@@ -514,6 +513,8 @@ body{
     
     @media (min-width:992px) {
     .view-account .content-panel {
+        min-height: 800px;
+        border-left: 1px solid #f3f3f7;
         margin-left: 200px
     }
     .view-account .mail-subject .subject {
