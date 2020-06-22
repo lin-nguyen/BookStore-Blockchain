@@ -11,6 +11,5 @@ Set up work environment:
 - python manage.py migrate # to create tables
 - python manage.py createsuperuser # to create admin account
 - python manage.py data # insert mock up data
-- extract media/book_pics/images.zip to a folder that not in the project and add them manually from admin site.
 - python manage.py runserver # run local server port 8000
 
