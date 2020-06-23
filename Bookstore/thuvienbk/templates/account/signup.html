@@ -1,6 +1,56 @@
 {% extends '_base.html' %}
 
 {% load crispy_forms_tags %}
+ {% load staticfiles %}
+
+{% load static %}
+{% block title %}Sign Up{% endblock title %}
+{% block css %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <style>
+        .edit1 {
+           margin-top: 0px !important;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+  <div class="container" style="margin-left: -68px;">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto mt-5">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign Up</h5>
+            <form class="form-signin" method="POST">
+                {% csrf_token %}
+              {% comment %} <div class="form-label-group">
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <label for="inputEmail">Email address</label>
+              </div>
+
+              <div class="form-label-group">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <label for="inputPassword">Password</label>
+              </div> {% endcomment %}
+              {{ form|crispy }}
+              {% comment %} <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                <label class="custom-control-label" for="customCheck1">Remember password</label>
+              </div> {% endcomment %}
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign Up</button>
+              <hr class="my-4">
+              <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fa fa-google mr-2"></i> Sign up with Google</button>
+              <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fa fa-facebook-f mr-2"></i> Sign up with Facebook</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+{% comment %} {% extends '_base.html' %}
+
+{% load crispy_forms_tags %}
 
 {% block title %}Sign up{% endblock %}
 
@@ -15,4 +65,4 @@
         <button class="btn btn-outline-info" type="submit">Sign up</button>
     </div>
 </form>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

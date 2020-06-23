@@ -1,12 +1,78 @@
 {% extends '_base.html' %}
 
+{% load crispy_forms_tags %}
+
+{% block title %}Delete Method{% endblock %}
+{% block css %}
+   <style>
+body {
+	color: #566787;
+	background: #f5f5f5;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+}
+.table-responsive {
+    margin: 30px 0;
+}
+.table-wrapper {
+	background: #fff;
+	padding: 20px 25px;
+	border-radius: 3px;
+	min-width: 1000px;
+	box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.table-title {        
+	padding-bottom: 15px;
+	background: #435d7d;
+	color: #fff;
+	padding: 16px 30px;
+	min-width: 100%;
+	margin: -20px -25px 10px;
+	border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+	margin: 5px 0 0;
+	font-size: 24px;
+    color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xl">
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2><i class="fa fa-trash" style="margin-right: 15px;"></i>Delete Method</h2>
+					</div>
+				</div>
+			</div>
+			<form method="post">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <h2>Are you sure you want to delete the method "{{ object.wallet_address }}" </h2>
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-danger" type="submit"><i class="fa fa-check" style="margin-right: 10px;"></i>Yes</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'payment-method' %}"><i class="fa fa-ban" style="margin-right: 10px;"></i>Cancel</a>
+                </div>
+            </form>
+		</div>
+	</div>        
+</div>
+{% endblock content %}
+{% comment %} {% extends '_base.html' %}
+
 {% block title %}Delete Method{% endblock %}
 
 {% block content %}
 <form method="post">
     {% csrf_token %}
     <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Delete Method</legend>
+        <legend class="border-bottom mb-4"  style="padding: 10px;"> Delete Method</legend>
         <h2>Are you sure you want to delete the method "{{ object.wallet_address }}" </h2>
     </fieldset>
     <div class="form-group">
@@ -14,4 +80,4 @@
         <a class="btn btn-outline-secondary" href="{% url 'payment-method' %}">Cancel</a>
     </div>
 </form>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

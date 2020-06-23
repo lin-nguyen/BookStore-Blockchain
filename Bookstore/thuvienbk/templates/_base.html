@@ -1,4 +1,5 @@
 {% load static %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,18 +10,30 @@
     <meta name="description" content="A framework for launching new Django projects quickly.">
     <meta name="authors" content="">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="{% static 'css/linearicons.css' %}">
+	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+	<link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chatbox.css' %}"> 
+    
     {% block css %}
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+       
     {% endblock %}
 </head>
 
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+<nav class="navbar2 navbar-expand-md navbar-dark bg-dark mb-4">
     <a href="{% url 'home' %}"><img src=" {% static 'images/logo.png' %} " alt="" title="" /></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,36 +44,277 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
+                   aria-expanded="false" style="font-size: 16px; color: white; margin-top: 5px;">
                     {{ user.email }}
                 </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                <div class="dropdown-menu dropdown-menu-right menu" aria-labelledby="userMenu">
                     <a class="dropdown-item" href="{% url 'account_change_password' %}">Change password</a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-divider" style="margin: 0px;"></div>
                     <a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
                 </div>
             </li>
         </ul>
         {% else %}
         <form class="form-inline ml-auto">
-            <a href="{% url 'account_login' %}" class="btn btn-outline-secondary">Sign in</a>
-            <a href="{% url 'account_signup' %}" class="btn btn-primary ml-2">Sign up</a>
+            <a href="{% url 'account_login' %}" class="btn btn-outline-light" style="margin-top: 5px">Sign in</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-primary ml-2" style="margin-top: 5px; margin-right: 5px">Sign up</a>
         </form>
         {% endif %}
     </div>
 </nav>
+<div class="fabs1">
+        <div class="chat">
+            <div class="chat_header">
+                <div class="chat_option">
+                    <div class="header_img">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>
+                    <span id="chat_head">Jane Doe</span>
+                    <br>
+                    <span class="agent">Agent</span>
+                    <span class="online">(Online)</span>
 
-<div class="container">
+                </div>
+
+            </div>
+            <div class="chat_body chat_login">
+                <a id="chat_first_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <p>We make it simple and seamless for businesses and people to talk to each
+                    other. Ask us anything</p>
+            </div>
+            <div id="chat_converse" class="chat_conversion chat_converse">
+                <a id="chat_second_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <span class="status">20m ago</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey! Would you like to talk sales, support, or anyone?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                <span class="status2">Just now. Not seen yet</span>
+            </div>
+            <div id="chat_body" class="chat_body">
+                <div class="chat_category">
+                    <a id="chat_third_screen" class="fab1">
+                        <i class="zmdi zmdi-arrow-right"></i>
+                    </a>
+                    <p>What would you like to talk about?</p>
+                    <ul>
+                        <li>Tech</li>
+                        <li class="active">Sales</li>
+                        <li >Pricing</li>
+                        <li>other</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div id="chat_form" class="chat_converse chat_form">
+                <a id="chat_fourth_screen" class="fab1">
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </a>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <span class="status">20m ago</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Agent typically replies in a few hours. Don't miss their reply.
+                    <div>
+                        <br>
+                        <form class="get-notified">
+                            <label for="chat_log_email">Get notified by email</label>
+                            <input id="chat_log_email" placeholder="Enter your email"/>
+                            <i class="zmdi zmdi-chevron-right"></i>
+                        </form>
+                    </div>
+                </span>
+
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Send message to agent.
+                    <div>
+                        <form class="message_form">
+                            <input placeholder="Your email"/>
+                            <input placeholder="Technical issue"/>
+                            <textarea rows="4" placeholder="Your message"></textarea>
+                            <button>Send</button>
+                        </form>
+
+                    </div>
+                </span>
+            </div>
+            <div id="chat_fullscreen" class="chat_conversion chat_converse">
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey there! Any question?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Hello!</span>
+                <div class="status">20m ago</div>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Hey! Would you like to talk sales, support, or anyone?</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type
+                    specimen book.</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    Where can I get some?</span>
+                <span class="chat_msg_item chat_msg_item_admin">
+                    <div class="chat_avatar">
+                        <img
+                            src="http://res.cloudinary.com/dqvwa7vpe/image/upload/v1496415051/avatar_ma6vug.jpg"/>
+                    </div>The standard chuck...</span>
+                <span class="chat_msg_item chat_msg_item_user">
+                    There are many variations of passages of Lorem Ipsum available</span>
+                <div class="status2">Just now, Not seen yet</div>
+                <span class="chat_msg_item ">
+                    <ul class="tags">
+                        <li>Hats</li>
+                        <li>T-Shirts</li>
+                        <li>Pants</li>
+                    </ul>
+                </span>
+            </div>
+            <div class="fab_field">
+                <a id="fab_camera" class="fab1">
+                    <i class="zmdi zmdi-camera"></i>
+                </a>
+                <a id="fab_send" class="fab1">
+                    <i class="zmdi zmdi-mail-send"></i>
+                </a>
+                <textarea
+                    id="chatSend"
+                    name="chat_message"
+                    placeholder="Send a message"
+                    class="chat_field1 chat_message1"></textarea>
+            </div>
+        </div>
+        <a id="prime" class="fab1">
+            <i class="prime zmdi zmdi-comment-outline"></i>
+        </a>
+    </div>
+<div class="container edit1" style="margin-top: 100px; margin-bottom: 30px;">
+ 
     {% block content %}
     <p>Default content...</p>
     {% endblock content %}
 </div>
 
-<nav class="navbar fixed-bottom navbar-dark bg-dark">
+{% comment %} <nav class="navbar fixed-bottom navbar-dark bg-dark">
     <a class="navbar-brand" href="{% url 'about' %}">&copy; Book Store BK</a>
-</nav>
+</nav> {% endcomment %}
+<!--footer starts from here-->
+<footer class="footer">
+<div class="container bottom_border">
+<div class="row">
+<div class=" col-sm-4 col-md col-sm-4  col-12 col">
+<h5 class="headin5_amrc col_white_amrc pt2">Our Address</h5>
+<!--headin5_amrc-->
+<ul class="footer_ul_amrc">
+				<li><p><i class="fa fa-location-arrow" style ="margin-left:5px;"></i> 268 Lý Thường Kiệt, Phường 14, Quận 10, Hồ Chí Minh </p></li>
+				<li><p><i class="fa fa-phone" style ="margin-left:5px;"></i>  028 3864 7256 </p></li>
+				<li><p><i class="fa fa fa-envelope" style ="margin-left:5px;"></i> hcmut@gmail.com  </p></li>
+				</ul>
 
-{% block javascript %}
+
+</div>
+
+
+<div class=" col-sm-4 col-md  col-6 col">
+    <h5 class="headin5_amrc col_white_amrc pt2">Timing</h5>
+    <!--headin5_amrc-->
+    <ul class="footer_ul_amrc">
+        <li><a href="http://webenlance.com">Mon - Fri: 7am - 10pm</a></li>
+        <li><a href="http://webenlance.com">​​Saturday: 8am - 10pm</a></li>
+        <li><a href="http://webenlance.com">​Sunday: 8am - 11pm</a></li>
+        </ul>
+    <!--footer_ul_amrc ends here-->
+</div>
+
+
+<div class=" col-sm-4 col-md  col-6 col">
+    <h5 class="headin5_amrc col_white_amrc pt2">Help</h5>
+    <!--headin5_amrc-->
+    <ul class="footer_ul_amrc">
+        <li><a href="http://webenlance.com">Payment Methods</a></li>
+        <li><a href="http://webenlance.com">Shipping Rates & Policies</a></li>
+        <li><a href="http://webenlance.com">Returns & Replacements</a></li>
+        <li><a href="http://webenlance.com">Privacy Policy</a></li>
+        <li><a href="http://webenlance.com">FAQ’s</a></li>
+    </ul>
+<!--footer_ul_amrc ends here-->
+</div>
+
+
+<div class=" col-sm-4 col-md  col-12 col">
+<h5 class="headin5_amrc col_white_amrc pt2">Delivery Partner</h5>
+<!--headin5_amrc ends here-->
+
+<ul class="footer_ul2_amrc">
+<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/loship.png'%}" width="80px" height="40px"/></a></p></li>
+<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/ghn2.png'%}" width="80px" height="40px"/></a></p></li>
+<li style="display: inline-block"><a href="#"><img src="{% static '/images/logo/Grab-express.png'%}" width="80px" height="40px"/></a></p></li>
+</ul>
+<!--footer_ul2_amrc ends here-->
+</div>
+</div>
+</div>
+
+
+<div class="container">
+<ul class="foote_bottom_ul_amrc">
+<li><a href="http://webenlance.com">Home</a></li>
+<li><a href="http://webenlance.com">About</a></li>
+<li><a href="http://webenlance.com">Services</a></li>
+<li><a href="http://webenlance.com">Pricing</a></li>
+<li><a href="http://webenlance.com">Blog</a></li>
+<li><a href="http://webenlance.com">Contact</a></li>
+</ul>
+<!--foote_bottom_ul_amrc ends here-->
+<p class="text-center" style="color: #CCC;">Copyright @2017 | Designed With by <a target="_blank">BK's team</a>. <img src="{% static 'audit/images/hcmut.png' %}"
+																	 style="width: 70px; padding-left: 20px;"></p> 
+
+<ul class="social_footer_ul">
+<li><a href="http://webenlance.com"><i class="fa fa-facebook-f" style="color: #4267B2"></i></a></li>
+<li><a href="http://webenlance.com"><i class="fa fa-twitter" style="color: #1DA1F2"></i></a></li>
+<li><a href="http://webenlance.com"><i class="fa fa-linkedin" style="color: #0073B0"></i></a></li>
+<li><a href="http://webenlance.com"><i class="fa fa-instagram" style="color: #B71370"></i></a></li>
+</ul>
+<!--social_footer_ul ends here-->
+</div>
+
+</footer>
 <!-- Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -76,6 +330,8 @@
 
 <!-- Project JS -->
 <script src="{% static 'js/base.js' %}"></script>
+<script src="{% static 'js/chatbox.js' %}"></script>
+{% block javascript %}
 
 {% endblock javascript %}
 
