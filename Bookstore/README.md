@@ -1,16 +1,15 @@
-
-Set up moi truong lam viec :
-- Cai python 3.6.4 
-- Django 2.0.7
-- Pycharm / Visual Studio Code 
+Set up work environment:
+- Python: Install Python 3.6.4 
+- IDE: Install Pycharm / VS Code
+- Django: Install django version 2.0.7
 - venv
 - python3 -m venv testenv
 - source testenv/bin/activate
-- pip install nhung thu bao' lo^i~
-- Postgres , tao db name BTL_thuvien truoc khi chay app 
-- python manage.py flush # xoa het db
-- python manage.py migrate # tao tables
-- python manage.py createsuperuser #tao account admin
-- python manage.py data # insert data mau
-- python manage.py runserver # chay local server port 8000
-
+- pip install required libraries / packages
+- Database: Install Postgres, create database has name 'BookStore', the owner is 'postgres' and password is 'fromBKU2017'
+- python manage.py flush # to clear old database
+- python manage.py migrate # to create tables
+- python manage.py createsuperuser # to create admin account
+- python manage.py data # insert mock up data
+- extract media/book_pics/images.zip to a folder that not in the project and add them manually from admin site.
+- python manage.py runserver # run local server port 8000
