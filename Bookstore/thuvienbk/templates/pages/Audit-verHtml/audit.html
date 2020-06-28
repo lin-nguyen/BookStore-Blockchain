@@ -460,7 +460,7 @@ contract BookStore is BookStoreInit{
 
 
     <div id="modal-confirmation" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg" style="height: auto; margin-top: 0px;">
 
             <!-- Spinning overlay -->
             <div id="overlay">
@@ -537,7 +537,7 @@ implementTransaction( {{ user.paymentmethod_set.first.wallet_address }} ,  0xAb0
     
     <!-- Result Modal -->
     <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered .modal-xl">
+        <div class="modal-dialog modal-dialog-centered .modal-xl" style="display: flex;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Success <img src="{% static 'audit/images/tick.svg' %}" style="width: 20px; vertical-align: baseline;"></h5>
