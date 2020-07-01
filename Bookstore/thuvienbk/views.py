@@ -138,6 +138,7 @@ def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book
     f.write("ownerToBalance['0x0000'] = msg.value\n")
     f.close()
     f = open("thuvienbk/renderToPython.py", 'a+')
+    # change something with bugs
     dse = symbolic.SymbolicExecution(asttree,f )
     listFunc= dse.run()
     f.close()
