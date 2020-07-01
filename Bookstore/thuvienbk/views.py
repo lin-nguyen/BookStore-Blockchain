@@ -124,6 +124,7 @@ def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book
     f_write(f, 'admin', admin, 'str')
     f_write(f, 'user_address', user_address, 'str')
     f_write(f, 'totalToken', totalToken, 'dict')
+    print(totalToken)
     f.write("ownerToOrderList = collections.defaultdict(lambda : 0)\n")
     f_write(f,"ownerToOrderList[user_address]", ownerToOrderList[user_address], 'dict')
     f.write("ownerToOrderList[user_address]=convert(ownerToOrderList[user_address])\n")
@@ -137,12 +138,15 @@ def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book
     f.write("msg = Msg(admin, user_address, book_price*book_quantity)\n")
     f.write("ownerToBalance['0x0000'] = msg.value\n")
     f.close()
+    
     f = open("thuvienbk/renderToPython.py", 'a+')
     # change something with bugs
     dse = symbolic.SymbolicExecution(asttree,f )
     listFunc= dse.run()
+    #import time ;time.sleep(1)
     f.close()
-
+    
+    
     import thuvienbk.renderToPython as renderToPython
     transaction = renderToPython.BookStore()
     init = (renderToPython.admin,
@@ -162,7 +166,8 @@ def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book
             renderToPython.user_address,
             (renderToPython.ownerToBalance[renderToPython.user_address],
             renderToPython.getSumToken(renderToPython.ownerToOrderList[renderToPython.user_address]) ))
-
+    #f = open("thuvienbk/renderToPython.py", 'w')
+    #f.close()
     return init, final
 
 
@@ -170,7 +175,8 @@ def runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken,book
 def audit_request(request):
     if request.method == 'POST':
         print("Im auditing...")
-
+        
+        
         # Get user info
         user_address = PaymentMethod.objects.get(user_id= request.user.id).wallet_address
 
@@ -178,7 +184,6 @@ def audit_request(request):
         book_price = Book.objects.get(ISBN=request.POST['isbn']).price
         book_isbn = str(Book.objects.get(ISBN=request.POST['isbn']).ISBN)
         book_quantity = 1
-
         
 
         # Implement web3
@@ -204,9 +209,15 @@ def audit_request(request):
         ownerToBalance[admin] = web3.eth.getBalance(admin)
         ownerToBalance[user_address] =  web3.eth.getBalance(user_address)
         ownerToBalance['0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De']= web3.eth.getBalance('0xcAd4954fA4cb431bAD9a84c3ae8e279fe069A6De')
+        lst = Book.objects.all()
+        in_stocks=  Book.objects.get(ISBN=request.POST['isbn']).in_stocks
+        totalToken = {}
         
-        totalToken = {book_isbn: 3, 'physics':12 , 'computer': 5}
-        
+        for x in range(0, len(lst)):
+            totalToken[str(lst[x].ISBN)] = lst[x].in_stocks
+            #print(type(lst[x]))
+        #totalToken = {book_isbn: 3, 'physics':12 , 'computer': 5}
+        print(totalToken)
         SC = runSC(admin, user_address ,ownerToOrderList, ownerToBalance, totalToken , book_isbn, book_quantity, book_price*pow(10,18))
         data ={}
         data['audit_result'] = SC[1]
