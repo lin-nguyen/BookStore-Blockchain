@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'thuvienbk',
     'book',
+    'rasaweb',
     'django.contrib.admin',
     'django.contrib.auth', # contains the core of the authentication framework, and its default models.
     'django.contrib.contenttypes', # is the Django content type system, which allows permissions to be associated with models you create.
